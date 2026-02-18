@@ -34,27 +34,60 @@ function createExpInfo() {
 
         // Structure of trials for training and main experiment
         trialStructures: {
-            training: ["fixationcross", "blank", "soa", "target", "feedbackPos"], // Sequence of trial parts that form a trial in the training trials
-            main: ["fixationcross", "blank", "soa", "target", "feedback"]         // Sequence of trial parts that form a trial in the main blocks
+            main: ["fixationCross",
+                    "word", "word", "word", "word","word", "word",
+                    "word", "word", "word", "word","word", "word",
+                    "recall"]         // Sequence of trial parts that form a trial in the main blocks
          },
 
         // Stimuli and response keys
-        stimuli : [["3","4"], ["5","6"]], // Stimulus pairs used in the task. Each sub-array represents a pair of stimuli.
-        keys : [["3","4"], ["5","6"]],    // Response keys corresponding to stimuli
+        words: [
+            // Musical instruments
+            ["piano", "violin", "guitar", "oboe", "drum", "bugle"],
+            // Vegetables
+            ["turnip", "celery", "onion", "tomato", "potato", "cauliflower"],
+            // Fruits
+            ["grape", "kiwi", "melon", "blueberry", "lemon", "peach"],
+            // Metals
+            ["steel", "pewter", "brass", "nickel", "titanium", "silver"],
+            // Farm animals
+            ["horse", "chick", "mare", "pig", "bull"],
+            // Birds
+            ["duck", "falcon", "vulture", "partridge", "raven", "white owl", "condor"],
+            // Vehicles
+            ["airplane", "boat", "car", "subway", "streetcar", "truck"],
+            // Alcoholic beverages
+            ["cognac", "whisky", "port", "brandy", "vodka", "pineau"],
+            // Fish
+            ["cod", "halibut", "salmon", "pike", "shark", "yellow pike"],
+            // Clothing
+            ["hat", "mitten", "bobble cap", "headband", "scarf", "coat"],
+            // Sports
+            ["tennis", "soccer", "skating", "diving", "hockey", "baseball"],
+            // Wild animals
+            ["beaver", "ground hog", "fox", "rabbit", "coyote", "roe deer"],
+            // Planets
+            ["Pluto", "Venus", "Mercury", "Jupiter", "Mars", "Saturn"],
+            // Professions
+            ["sailor", "plumber", "barman", "chemist", "welder", "tradesman"]
+
+        ],
+
+        trainingWords: [
+            "guitar", "tomato", "silver", "condor", "truck", "hockey"      
+        ],
+
+        lists: generateStimulusSets(words), // Generate stimulus sets (same and different semantic categories) for the experiment based on the provided word categories
 
         // Block settings
-        blocks : 3,           // Number of main experiment blocks
-        trainingblocks : 2,   // Number of training blocks
+        blocks : 1,           // Number of main experiment blocks
+        trainingblocks : 1,   // Number of training blocks
 
         // Timing parameters (in milliseconds)
         blockStartDuration : 1000,        // Duration of block start screen
         fixationcrossDuration : 250,      // Duration of fixation cross
-        soaDuration : 150,                // Stimulus Onset Asynchrony (SOA) duration (the time where only the distractor is presented)
-        blankDuration : 35,               // Duration of blank screen
-        targetDuration : 500,             // Duration the target is shown
-        responseWindowDuration : 500,     // Time window for responses
-        feedbackDuration : 200,           // Duration of feedback in main trials
-        trainingFeedbackDuration : 500,   // Duration of feedback in training trials
+        blankDuration: 35,               // Duration of blank screen shown between word stimuli
+        wordDuration: 500,               // Duration of word presentation
 
         // Visual sizes (in pixels)
         stimulusSize : 45,        // Size of target stimuli

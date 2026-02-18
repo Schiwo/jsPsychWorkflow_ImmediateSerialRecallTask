@@ -99,4 +99,83 @@ function posFdbStimulus() {
 function normalBackground() {
   document.body.style.background = expInfo.backgroundColor;
 }
+<<<<<<< Updated upstream
 ssdfsdf
+=======
+
+
+
+/**
+ * Generates stimulus sets for an immediate recall task by creating full and mixed category word lists.
+ *
+ * This function takes a set of categories (each containing words) and:
+ * 1. Selects 6 full categories as-is for one condition
+ * 2. Creates 6 mixed categories by combining one word from each remaining category
+ *
+ * The mixed categories ensure no word is reused across trials.
+ *
+ * @param {Array<Array<String>>} categories - Array of categories, where each category is an array of words
+ * @returns {Object} Object containing:
+ *   - {Array<Array<String>>} fullCategories - 6 randomly selected full categories
+ *   - {Array<Array<String>>} mixedCategories - 6 mixed arrays, each containing one word from each remaining category
+ * @throws {Error} If there are not enough words to create mixed arrays without reuse
+ */
+function generateStimulusSets(categories) {
+  /**
+   * Helper function: Shuffles an array in-place using Fisher–Yates algorithm.
+   * Creates a copy before shuffling to avoid mutating the original array.
+   *
+   * @param {Array} arr - Array to shuffle
+   * @returns {Array} New shuffled array
+   */
+  function shuffle(arr) {
+    const array = arr.slice(); // Create a shallow copy
+    // Fisher-Yates shuffle algorithm
+    for (let i = array.length - 1; i > 0; i--) {
+      // Pick a random index from 0 to i
+      const j = Math.floor(Math.random() * (i + 1));
+      // Swap elements at i and j
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // Shuffle the input categories to randomize selection
+  const shuffledCategories = shuffle(categories);
+
+  // Select the first 6 shuffled categories as full stimulus sets
+  const selectedFull = shuffledCategories.slice(0, 6);
+
+  // Extract remaining categories for mixed stimulus set creation
+  const remaining = shuffledCategories.slice(6);
+
+  // Shuffle words within each remaining category to ensure random selection
+  const shuffledRemaining = remaining.map(cat => shuffle(cat));
+
+  // Create 6 mixed arrays by drawing one word from each remaining category
+  // This ensures diversity while preventing word reuse across trials
+  const mixedArrays = [];
+
+  for (let i = 0; i < 6; i++) {
+    const newArray = [];
+
+    // For each mixed array, select one word from each remaining category
+    for (let cat of shuffledRemaining) {
+      // Validate that the category has words available
+      if (cat.length === 0) {
+        throw new Error("Not enough words to create mixed arrays without reuse.");
+      }
+      // Pop removes the word from the category, preventing reuse in future iterations
+      newArray.push(cat.pop());
+    }
+
+    mixedArrays.push(newArray);
+  }
+
+  // Return both stimulus set types for the experiment
+  return {
+    fullCategories: selectedFull,
+    mixedCategories: mixedArrays
+  };
+}
+>>>>>>> Stashed changes
