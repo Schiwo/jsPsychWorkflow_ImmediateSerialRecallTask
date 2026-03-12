@@ -99,9 +99,6 @@ function posFdbStimulus() {
 function normalBackground() {
   document.body.style.background = expInfo.backgroundColor;
 }
-<<<<<<< Updated upstream
-ssdfsdf
-=======
 
 
 
@@ -109,16 +106,16 @@ ssdfsdf
  * Generates stimulus sets for an immediate recall task by creating full and mixed category word lists.
  *
  * This function takes a set of categories (each containing words) and:
- * 1. Selects 6 full categories as-is for one condition
- * 2. Creates 6 mixed categories by combining one word from each remaining category
+* 1. Selects half of the categories as full categories
+* 2. Creates the other half as mixed categories by combining one word from each remaining category
  *
  * The mixed categories ensure no word is reused across trials.
  *
  * @param {Array<Array<String>>} categories - Array of categories, where each category is an array of words
  * @returns {Object} Object containing:
- *   - {Array<Array<String>>} fullCategories - 6 randomly selected full categories
- *   - {Array<Array<String>>} mixedCategories - 6 mixed arrays, each containing one word from each remaining category
- * @throws {Error} If there are not enough words to create mixed arrays without reuse
+ *   - {Array<Array<String>>} fullCategories - randomly selected full categories
+ *   - {Array<Array<String>>} mixedCategories - mixed arrays, each containing one word from each remaining category
+* @throws {Error} If the number of category arrays is odd
  */
 function generateStimulusSets(categories) {
   /**
@@ -140,33 +137,50 @@ function generateStimulusSets(categories) {
     return array;
   }
 
+  // The number of categories must be even so they can be split equally
+  if (categories.length % 2 !== 0) {
+    throw new Error("The number of category arrays must be even.");
+  }
+
+  const halfCategoryCount = categories.length / 2;
+
   // Shuffle the input categories to randomize selection
   const shuffledCategories = shuffle(categories);
 
-  // Select the first 6 shuffled categories as full stimulus sets
-  const selectedFull = shuffledCategories.slice(0, 6);
+  // Select the first half of the shuffled categories as full stimulus sets
+  const selectedFull = shuffledCategories.slice(0, halfCategoryCount);
 
   // Extract remaining categories for mixed stimulus set creation
-  const remaining = shuffledCategories.slice(6);
+  const remaining = shuffledCategories.slice(halfCategoryCount);
 
   // Shuffle words within each remaining category to ensure random selection
-  const shuffledRemaining = remaining.map(cat => shuffle(cat));
+  // We keep a position pointer for each category and recycle words (reshuffled) if needed.
+  const categoryPools = remaining.map((cat) => {
+    if (cat.length === 0) {
+      throw new Error("Each category must contain at least one word.");
+    }
+    return {
+      words: shuffle(cat),
+      index: 0
+    };
+  });
 
-  // Create 6 mixed arrays by drawing one word from each remaining category
+  // Create one mixed array per remaining category by drawing one word from each remaining category
   // This ensures diversity while preventing word reuse across trials
   const mixedArrays = [];
 
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < halfCategoryCount; i++) {
     const newArray = [];
 
     // For each mixed array, select one word from each remaining category
-    for (let cat of shuffledRemaining) {
-      // Validate that the category has words available
-      if (cat.length === 0) {
-        throw new Error("Not enough words to create mixed arrays without reuse.");
+    for (let pool of categoryPools) {
+      // Recycle category words (reshuffled) if all words were used once
+      if (pool.index >= pool.words.length) {
+        pool.words = shuffle(pool.words);
+        pool.index = 0;
       }
-      // Pop removes the word from the category, preventing reuse in future iterations
-      newArray.push(cat.pop());
+      newArray.push(pool.words[pool.index]);
+      pool.index++;
     }
 
     mixedArrays.push(newArray);
@@ -178,4 +192,3 @@ function generateStimulusSets(categories) {
     mixedCategories: mixedArrays
   };
 }
->>>>>>> Stashed changes

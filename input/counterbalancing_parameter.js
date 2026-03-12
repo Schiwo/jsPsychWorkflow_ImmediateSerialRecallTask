@@ -18,14 +18,14 @@
 function createCounterBalancingParameter() {
 
     let counterBalancingParameter = {
-        factors: [2,2,2,2], // [current congruency, previous congruency, stimulus set, stimulus option]
-        factorProportions: [null, null, null, null],
-        transitionRules: [null, ["identical", 1, 0], ["next", 1], null],
-        sets: 1,
-        preprendTrials: 1,
-        prependRules: [["identical", 1, 1], null, ["next", 1], null],
+        factors: [2], // [semantic relation (related vs unrelated)]
+        factorProportions: [null],
+        transitionRules: [null],
+        sets: 6,
+        preprendTrials: 0,
+        prependRules: [null],
         appendTrials: 0,
-        appendRules: [null, null, null, null],
+        appendRules: [null],
         debugMode: false
     }
 

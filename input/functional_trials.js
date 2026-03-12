@@ -112,8 +112,9 @@ function createFunctionalTrials(expInfo) {
          * Waits for any key press before continuing.
          */
         welcome: {
-            type: jsPsychHtmlKeyboardResponse,
-            stimulus: "Welcome to the experiment. Press any key to begin!"
+            type: jsPsychHtmlButtonResponse,
+            stimulus: "Welcome to the experiment. For this experiment, you need a microphone. On the next screen, you will be asked to initialize your microphone. Press the button to continue!",
+            choices: ["Continue"]
         },
 
         /**
@@ -122,10 +123,10 @@ function createFunctionalTrials(expInfo) {
          * or continue to the forwarding/exit page.
          */
         exit: {
-            type: jsPsychHtmlKeyboardResponse,
+            type: jsPsychHtmlButtonResponse,
             stimulus: `The experiment is finished now. Thank you for your participation!
-                       Press "${expInfo.instrKeyForward}" to be forwarded!`,
-            choices: [expInfo.instrKeyForward]
+                       Press the button to be forwarded!`,
+            choices: ["Finish Experiment"]
         },
 
         /**
@@ -150,28 +151,11 @@ function createFunctionalTrials(expInfo) {
                 subject_gender = data.gender;
             }
         },
-
         /**
-         * Displays a pause screen between blocks.
-         * Informs participants of the current block number
-         * and allows them to take a short break if desired.
-         */
-        blockPause: {
-            type: jsPsychHtmlKeyboardResponse,
-            stimulus: () => {
-                const currentBlock = jsPsych.getCurrentTrial().data.blockNr;
-
-                if (currentBlock === 1) {
-                    return `This is block nr. ${currentBlock} of ${expInfo.blocks}.<br/>
-                            Continue by pressing "${expInfo.instrKeyForward}"!`;
-                } else {
-                    return `This is block nr. ${currentBlock} of ${expInfo.blocks}.
-                            You can take a short break, if you want to!<br/>
-                            Continue by pressing "${expInfo.instrKeyForward}"!`;
-                }
-            },
-            choices: [expInfo.instrKeyForward],
-            data: { trialPart: 'blockPause' }
-        },
+            * Trial for initializing the participant's microphone for audio recording.  
+            */
+        initMic: {
+            type: jsPsychInitializeMicrophone
+        }
     };
 }

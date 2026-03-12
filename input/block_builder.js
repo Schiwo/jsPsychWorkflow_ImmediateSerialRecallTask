@@ -3,8 +3,7 @@
  *
  * This function constructs a complete block of trials by setting up the block start screen
  * (fixation cross), iterating through the specified number of trials, and constructing each
- * trial based on the provided trial structure and factor levels. For main blocks (not training),
- * it also adds a block pause screen before the block begins.
+ * trial based on the provided trial structure and factor levels.
  *
  * @param {Array} timeline - The timeline array to add the block elements to.
  * @param {Array} tstructure - The trial structure array defining the sequence of stimulus types within each trial.
@@ -16,31 +15,17 @@
  * @param {number} trainingLength - The proportion of trials to use for training blocks (e.g., 0.1 for 10%).
  * @returns {Array} The updated timeline with the block and all its trials added.
  */
-function buildExperimentalBlock(timeline, tstructure, tlist, block, expInfo, functionalTrials, training = false, trainingLength) {
+function buildExperimentalBlock(timeline, tstructure, tlist, block, expInfo, functionalTrials, training = false) {
   // --- Determine the total number of trials for this block ---
   // For training blocks, trials are reduced by the trainingLength factor; otherwise, use all trials.
-  blockLength = training? (tlist.length * trainingLength) : tlist.length;
-
-  // --- Add block pause screen (main blocks only) ---
-  // Before starting a main experimental block, show a pause screen and record which block is beginning.
-  if (!training) {
-    let blockPauseCopy = deepCopy(functionalTrials.blockPause);
-    blockPauseCopy.data.blockNr = block + 1;
-    timeline.push(blockPauseCopy);
-  }
-  
-  // --- Add block start fixation cross ---
-  // Display the fixation cross at the beginning of the block. Use negative block numbers for training blocks.
-  blockStart = stimulusConstructor(expInfo, "fixationcross", null, null, training? - (block + 1) : (block + 1));
-  blockStart.trial_duration = expInfo.blockStartDuration;
-  timeline.push(blockStart);
+  blockLength = training? 1 : tlist.length;
 
   // --- Add all trials in the block ---
   // For each trial, create a copy of the trial structure and construct each stimulus based on the factor levels.
   for (var i = 0; i < blockLength; i++) {
     let trialCopy = deepCopy(tstructure);
     for (var j = 0; j < trialCopy.length; j++) {
-      timeline.push(stimulusConstructor(expInfo, trialCopy[j], tlist, i, block));
+      timeline.push(stimulusConstructor(expInfo, trialCopy[j], tlist, j, i, block, training));
     }
   }
   return timeline;
@@ -58,15 +43,17 @@ function buildExperimentalBlock(timeline, tstructure, tlist, block, expInfo, fun
  * @returns {Array} The updated timeline with the experiment start sequence added.
  */
 function buildExperimentStart(timeline, functionalTrials) {
-  // --- Add experiment initialization trials (skip if in skim mode) ---
-  if (!skimMode) {
+  // --- Add experiment initialization trials ---
     // Check the participant's browser for compatibility.
     timeline.push(functionalTrials.browserCheck);
     // Display welcome message to the participant.
     timeline.push(functionalTrials.welcome);
+    // Initialize the microphone for audio recording (used in recall phase).
+    timeline.push(functionalTrials.initMic);
+    // Display informed consent for the experiment.
+    timeline.push(functionalTrials.informedConsent);
     // Ask the participant for their age and gender information.
     timeline.push(functionalTrials.ageGender);
-  }
   return timeline;
 }
 

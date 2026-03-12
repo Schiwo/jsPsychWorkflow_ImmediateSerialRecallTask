@@ -34,7 +34,7 @@ function createExpInfo() {
 
         // Structure of trials for training and main experiment
         trialStructures: {
-            main: ["fixationCross",
+            main: ["trialStart", "fixationCross",
                     "word", "word", "word", "word","word", "word",
                     "word", "word", "word", "word","word", "word",
                     "recall"]         // Sequence of trial parts that form a trial in the main blocks
@@ -51,33 +51,31 @@ function createExpInfo() {
             // Metals
             ["steel", "pewter", "brass", "nickel", "titanium", "silver"],
             // Farm animals
-            ["horse", "chick", "mare", "pig", "bull"],
+            ["horse", "chick", "mare", "pig", "bull", "duck"],
             // Birds
-            ["duck", "falcon", "vulture", "partridge", "raven", "white owl", "condor"],
+            ["falcon", "vulture", "partridge", "raven", "owl", "condor"],
             // Vehicles
             ["airplane", "boat", "car", "subway", "streetcar", "truck"],
             // Alcoholic beverages
             ["cognac", "whisky", "port", "brandy", "vodka", "pineau"],
             // Fish
-            ["cod", "halibut", "salmon", "pike", "shark", "yellow pike"],
+            ["cod", "halibut", "salmon", "pike", "shark", "zander"],
             // Clothing
-            ["hat", "mitten", "bobble cap", "headband", "scarf", "coat"],
+            ["hat", "mitten", "cap", "headband", "scarf", "coat"],
             // Sports
             ["tennis", "soccer", "skating", "diving", "hockey", "baseball"],
             // Wild animals
-            ["beaver", "ground hog", "fox", "rabbit", "coyote", "roe deer"],
-            // Planets
-            ["Pluto", "Venus", "Mercury", "Jupiter", "Mars", "Saturn"],
-            // Professions
-            ["sailor", "plumber", "barman", "chemist", "welder", "tradesman"]
-
+            ["beaver", "boar", "fox", "rabbit", "coyote", "deer"]
         ],
 
         trainingWords: [
-            "guitar", "tomato", "silver", "condor", "truck", "hockey"      
+            "sea", "camera", "aviation", "hurdle", "ransom", "empire"      
         ],
 
-        lists: generateStimulusSets(words), // Generate stimulus sets (same and different semantic categories) for the experiment based on the provided word categories
+        lists: null, // Populated in timeline_builder.js
+        sameRelationWords: null, // Populated in timeline_builder.js
+        differentRelationWords: null, // Populated in timeline_builder.js
+
 
         // Block settings
         blocks : 1,           // Number of main experiment blocks
@@ -85,13 +83,15 @@ function createExpInfo() {
 
         // Timing parameters (in milliseconds)
         blockStartDuration : 1000,        // Duration of block start screen
-        fixationcrossDuration : 250,      // Duration of fixation cross
+        fixationcrossDuration : 1000,      // Duration of fixation cross
         blankDuration: 35,               // Duration of blank screen shown between word stimuli
-        wordDuration: 500,               // Duration of word presentation
+        wordDuration: 1000,               // Duration of word presentation
+        recordingDuration: 10000,          // Duration of recall phase (time given to participant to recall words)
 
         // Visual sizes (in pixels)
-        stimulusSize : 45,        // Size of target stimuli
+        stimulusSize : 30,        // Size of target stimuli
         fixationCrossSize : 45,   // Size of fixation cross
+        recallInstruction: "Recall now!", // Instruction text for recall phase
 
         // Instruction navigation keys
         instrKeyForward : "C",   // Key to move forward in instructions

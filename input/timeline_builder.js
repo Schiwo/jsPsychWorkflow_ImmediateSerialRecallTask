@@ -16,6 +16,9 @@ function timelineBuilder() {
   // Get information about the experiment (like number of blocks, used keys, etc.). See further in experiment_information.js
   // This object should be globally available, as it contains all the settings that are used across the different files.
   expInfo = createExpInfo();
+  expInfo.lists = generateStimulusSets(expInfo.words);
+  expInfo.sameRelationWords = shuffle(expInfo.lists.fullCategories);
+  expInfo.differentRelationWords = shuffle(expInfo.lists.mixedCategories);
 
   // Set up counterbalancing (to make sure conditions are shown in a balanced way). See further in counterbalancing_parameter.js
   const counterBalancingParameter = createCounterBalancingParameter();
@@ -52,22 +55,21 @@ function timelineBuilder() {
   // Here you might want to change things for your own experiment, like adding different types of training blocks, changing the order of instructions, etc.
 
   // For testing purposes, you can skip directly to the main experiment by setting skipToMain to true (see init.html)
-  if (!skipToMain) {
 
     // ========== c.	Add initial functional elements.  ==========
 
     // Add the start of the experiment (like welcome screen, consent, etc.). See further in block_builder.js
     timeline = buildExperimentStart(timeline, functionalTrials);
-    // Add the first set of instructions. 
-    timeline.push(instructionsArray[0]);
+    // Skip instruction pages in skim mode to speed up test runs.
+    if (!skipToMain) {
+
+      // Add the first set of instructions. 
+      timeline.push(instructionsArray[0]);
+
     // Add the first training block. See further in block_builder.js
-    timeline = buildExperimentalBlock(timeline, expInfo.trialStructures.main, trainingList[1], 1, expInfo, functionalTrials, true, 0.2);
-    // Add the second set of instructions.
-    timeline.push(instructionsArray[1]);
-    // Add the second training block. See further in block_builder.js
-    timeline = buildExperimentalBlock(timeline, expInfo.trialStructures.main, trainingList[1], 1, expInfo, functionalTrials, true, 0.6);
-    // Add the third set of instructions
-    timeline.push(instructionsArray[2]);
+    timeline = buildExperimentalBlock(timeline, expInfo.trialStructures.main, trainingList[0], 0, expInfo, functionalTrials, true);
+      // Add the second set of instructions.
+      timeline.push(instructionsArray[1]);
   }
 
   // ========== d.	Construct and append experimental trials.  ==========
