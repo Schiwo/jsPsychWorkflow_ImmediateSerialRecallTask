@@ -21,7 +21,7 @@ function createCounterBalancingParameter() {
         factors: [2], // [semantic relation (related vs unrelated)]
         factorProportions: [null],
         transitionRules: [null],
-        sets: 6,
+        sets: 3,
         preprendTrials: 0,
         prependRules: [null],
         appendTrials: 0,

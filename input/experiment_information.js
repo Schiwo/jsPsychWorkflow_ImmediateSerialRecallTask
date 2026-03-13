@@ -82,15 +82,14 @@ function createExpInfo() {
         trainingblocks : 1,   // Number of training blocks
 
         // Timing parameters (in milliseconds)
-        blockStartDuration : 1000,        // Duration of block start screen
         fixationcrossDuration : 1000,      // Duration of fixation cross
         blankDuration: 35,               // Duration of blank screen shown between word stimuli
-        wordDuration: 1000,               // Duration of word presentation
+        wordDuration: 1500,               // Duration of word presentation
         recordingDuration: 10000,          // Duration of recall phase (time given to participant to recall words)
 
         // Visual sizes (in pixels)
-        stimulusSize : 30,        // Size of target stimuli
-        fixationCrossSize : 45,   // Size of fixation cross
+        stimulusSize : 20,        // Size of target stimuli
+        fixationCrossSize : 35,   // Size of fixation cross
         recallInstruction: "Recall now!", // Instruction text for recall phase
 
         // Instruction navigation keys
@@ -108,20 +107,6 @@ function createExpInfo() {
             },
             instructions2 : {
                 folder: "instructions2",
-                file: "Folie",
-                format: ".JPG",
-                length: 1
-            },
-
-            // Additional instruction sets can be added here
-            instructions3 : {
-                folder: "instructions3",
-                file: "Folie",
-                format: ".JPG",
-                length: 1
-            },
-            expInformation: {
-                folder: "expInformation",
                 file: "Folie",
                 format: ".JPG",
                 length: 1
